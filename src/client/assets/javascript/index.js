@@ -1,10 +1,16 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 // PROVIDED CODE BELOW (LINES 1 - 80) DO NOT REMOVE
 
 // The store will hold all information needed globally
 const store = {
   track_id: undefined,
-  player_id: undefined,
+  // Set the player_id to be static for testing
+  // repalce the line below with player_id: undefined, in PROD
+  player_id: 1,
   race_id: undefined,
 };
 
@@ -37,7 +43,7 @@ function setupClickHandlers() {
     function(event) {
       const { target } = event;
 
-      // TODO Clean this up so that class is always the target even
+      // TODO-RC Clean this up so that class is always the target even
       // if the user select the inner H3.
 
       // Race track form field
@@ -80,13 +86,16 @@ async function delay(ms) {
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
   // render starting UI
-  renderAt('#race', renderRaceStartView());
+  renderAt('#race', renderRaceStartView(store.track_id));
 
   // TODO - Get player_id and track_id from the store
+  const { player_id, track_id } = store;
 
   // const race = TODO - invoke the API call to create the race, then save the result
+  const race = createRace(player_id, track_id);
 
   // TODO - update the store with the race id
+  // TODAY - Robert left of here yesterday
 
   // The race has been created, now start the countdown
   // TODO - call the async function runCountdown
@@ -147,6 +156,11 @@ function handleSelectPodRacer(target) {
   target.classList.add('selected');
 
   // TODO - save the selected racer to the store
+  const selectedRacer = document
+    .querySelector('#racers .selected')
+    .getAttribute('id');
+
+  store.race_id = selectedRacer;
 }
 
 function handleSelectTrack(target) {
@@ -162,9 +176,11 @@ function handleSelectTrack(target) {
   target.classList.add('selected');
 
   // TODO - save the selected track id to the store
-  // TODO - ROBERT work on updating the store.
-  const newlySelected = document.querySelector('#tracks .selected');
-  console.log('Newly selected ', newlySelected);
+  const selectedTrack = document
+    .querySelector('#tracks .selected')
+    .getAttribute('id');
+
+  store.track_id = selectedTrack;
 }
 
 function handleAccelerate() {
@@ -238,9 +254,11 @@ function renderCountdown(count) {
 }
 
 function renderRaceStartView(track, racers) {
+  // USE STATIC TRACK NAME FOR TESTING
+  // Replace line 255 with <h1>Race: ${track.name}</h1>
   return `
 		<header>
-			<h1>Race: ${track.name}</h1>
+			<h1>Race: ${track}</h1>
 		</header>
 		<main id="two-columns">
 			<section id="leaderBoard">

@@ -387,7 +387,7 @@ function startRace(id) {
     method: 'POST',
     ...defaultFetchOpts(),
   })
-    .then(res => res.json())
+    // .then(res => res.json())
     .catch(err => console.log('Problem with getRace request::', err));
 }
 
